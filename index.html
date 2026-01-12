@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حضانه أونلاين</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            font-family: "Segoe UI", "Arial", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 10px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 1200px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+
+        .welcome-title {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            margin: 8px 0 20px 0;
+            text-align: center;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: white;
+            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+
+        .welcome-title span {
+            display: inline-block;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: default;
+            padding: 0 3px;
+            position: relative;
+        }
+
+        .welcome-title span::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .welcome-title span:hover::after {
+            width: 70%;
+        }
+
+        .welcome-title span:hover {
+            transform: translateY(-5px);
+            color: #FFD700;
+        }
+
+
+        .main-title-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px 25px;
+            margin: 15px 0 30px 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            position: relative;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            transform: perspective(800px) rotateX(5deg);
+            transition: all 0.4s ease;
+            width: 95%;
+            max-width: 600px;
+        }
+
+        .main-title-card:hover {
+            transform: perspective(800px) rotateX(0deg);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            border-color: #FFD700;
+        }
+
+        .main-title {
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            color: #4a4a9c;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            padding: 8px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .main-title-arabic {
+            font-size: clamp(1.5rem, 4.5vw, 2.2rem);
+            color: #4a4a9c;
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .main-title-arabic::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 20%;
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+            border-radius: 2px;
+        }
+
+        .main-title-english {
+            font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+            color: #667eea;
+            display: block;
+            font-style: italic;
+            font-weight: 600;
+        }
+
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 900px;
+            padding: 0 10px;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 180px;
+            max-width: 250px;
+            position: relative;
+        }
+
+        .button-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .button-image {
+            width: 140px;
+            height: 140px;
+            border-radius: 18px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            border: 4px solid white;
+            position: relative;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .button-image::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            background: linear-gradient(45deg, #667eea, #764ba2, #FFD700);
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .button-image:hover::before {
+            opacity: 1;
+        }
+
+        .button-image:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            border-color: transparent;
+        }
+
+        .button-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 15px;
+            transition: transform 0.4s ease;
+        }
+
+        .button-image:hover img {
+            transform: scale(1.08);
+        }
+
+        .button-label {
+            font-size: 1.6rem;
+            font-weight: bold;
+            padding: 10px 25px;
+            border-radius: 35px;
+            color: white;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            min-width: 140px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.25s ease;
+        }
+
+        .button-label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s;
+            z-index: -1;
+        }
+
+        .button-label:hover::before {
+            left: 100%;
+        }
+
+        .button-label:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .arabic .button-label {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+        }
+
+        .math .button-label {
+            background: linear-gradient(135deg, #4ECDC4, #6EDBD4);
+            color: #333;
+        }
+
+        .english .button-label {
+            background: linear-gradient(135deg, #A78BFA, #C4B5FD);
+        }
+
+
+        .bottom-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: auto;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 700px;
+            padding: 0 10px;
+        }
+
+        .action-button {
+            font-size: 1.4rem;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 35px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+            min-width: 160px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            color: white;
+        }
+
+        .action-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+            z-index: -1;
+        }
+
+        .action-button:hover::before {
+            transform: translateX(100%);
+        }
+
+        .action-button:hover {
+            transform: translateY(-4px) scale(1.04);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact {
+            background: linear-gradient(135deg, #48BB78, #68D391);
+        }
+
+        .map {
+            background: linear-gradient(135deg, #ED8936, #F6AD55);
+        }
+
+
+        @media (max-width: 768px) {
+            .button-group {
+                gap: 15px;
+            }
+
+            .button-container {
+                min-width: 150px;
+                max-width: 200px;
+            }
+
+            .button-image {
+                width: 120px;
+                height: 120px;
+                border-width: 3px;
+            }
+
+            .button-label {
+                font-size: 1.4rem;
+                padding: 8px 20px;
+                min-width: 120px;
+            }
+
+            .main-title-card {
+                padding: 18px 22px;
+                margin: 12px 0 25px 0;
+            }
+
+            .action-button {
+                font-size: 1.3rem;
+                padding: 10px 25px;
+                min-width: 140px;
+            }
+            
+            .welcome-title {
+                font-size: clamp(1.6rem, 5vw, 2.5rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .button-container {
+                width: 100%;
+                max-width: 220px;
+                min-width: auto;
+            }
+
+            .button-image {
+                width: 130px;
+                height: 130px;
+            }
+
+            .button-label {
+                font-size: 1.5rem;
+                min-width: 130px;
+                padding: 9px 22px;
+            }
+
+            .bottom-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .action-button {
+                width: 100%;
+                max-width: 220px;
+                font-size: 1.3rem;
+                padding: 11px 28px;
+            }
+
+            .main-title-card {
+                padding: 15px 20px;
+                margin: 10px 0 20px 0;
+                border-radius: 18px;
+            }
+
+            .welcome-title {
+                font-size: clamp(1.4rem, 4.5vw, 2rem);
+                margin: 5px 0 15px 0;
+            }
+            
+            .main-title-arabic {
+                font-size: clamp(1.3rem, 4vw, 1.8rem);
+            }
+            
+            .main-title-english {
+                font-size: clamp(1.1rem, 3vw, 1.5rem);
+            }
+        }
+
+
+        @media (min-width: 1200px) {
+            .button-image {
+                width: 160px;
+                height: 160px;
+            }
+
+            .button-label {
+                font-size: 1.8rem;
+                padding: 12px 30px;
+                min-width: 160px;
+            }
+
+            .main-title-card {
+                padding: 25px 35px;
+            }
+
+            .action-button {
+                font-size: 1.6rem;
+                padding: 14px 35px;
+                min-width: 180px;
+            }
+        }
+
+
+        .button-image:active,
+        .action-button:active {
+            transform: scale(0.96);
+            transition: transform 0.1s;
+        }
+
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .button-container {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .button-container:nth-child(2) {
+            animation-delay: 2s;
+        }
+
+        .button-container:nth-child(3) {
+            animation-delay: 4s;
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .button-image:hover,
+            .button-label:hover,
+            .action-button:hover,
+            .welcome-title span:hover,
+            .main-title-card:hover {
+                transform: none !important;
+            }
+            
+            .button-image:active,
+            .button-label:active,
+            .action-button:active {
+                transform: scale(0.95) !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="main-title-card">
+            <h2 class="main-title">
+                <span class="main-title-arabic">حضانه أونلاين</span>
+                <span class="main-title-english">Online Kindergarten</span>
+            </h2>
+        </div>
+
+        <div class="button-group">
+            <div class="button-container arabic">
+                <div class="button-wrapper">
+                    <div class="button-image" onclick="window.location.href='Arpic.html'">
+                        <img src="let.jpeg" alt="تعلم اللغة العربية">
+                    </div>
+                </div>
+                <div class="button-label">عربي</div>
+            </div>
+
+            <div class="button-container math">
+                <div class="button-wrapper">
+                    <div class="button-image" onclick="window.location.href='math.html'">
+                        <img src="123.jpeg" alt="تعلم الرياضيات">
+                    </div>
+                </div>
+                <div class="button-label">Math</div>
+            </div>
+
+            <div class="button-container english">
+                <div class="button-wrapper">
+                    <div class="button-image" onclick="window.location.href='english.html'">
+                        <img src="apc.jpeg" alt="تعلم اللغة الإنجليزية">
+                    </div>
+                </div>
+                <div class="button-label">English</div>
+            </div>
+        </div>
+
+        <div class="bottom-buttons">
+            <button class="action-button contact" onclick="window.location.href='call.html'">اتصل بنا</button>
+            <button class="action-button map" onclick="window.location.href='map.html'">خريطة الحضانة</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const letters = document.querySelectorAll('.welcome-title span');
+            letters.forEach((letter, index) => {
+                letter.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            setTimeout(() => {
+                const titleCard = document.querySelector('.main-title-card');
+                titleCard.style.transform = 'perspective(800px) rotateX(0deg) scale(1.03)';
+                titleCard.style.boxShadow = '0 15px 35px rgba(0,0,0,0.25)';
+
+                setTimeout(() => {
+                    titleCard.style.transform = 'perspective(800px) rotateX(5deg) scale(1)';
+                    titleCard.style.boxShadow = '0 10px 25px rgba(0,0,0,0.15)';
+                }, 400);
+            }, 600);
+
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function (event) {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+
+            const interactiveElements = document.querySelectorAll('.button-image, .action-button');
+            interactiveElements.forEach(element => {
+                element.addEventListener('touchstart', function () {
+                    this.style.transform = 'scale(0.95)';
+                });
+
+                element.addEventListener('touchend', function () {
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+            
+            if ('ontouchstart' in window) {
+                document.querySelectorAll('.button-container').forEach((container, index) => {
+                    container.style.animation = `float 6s ease-in-out ${index * 2}s infinite`;
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
